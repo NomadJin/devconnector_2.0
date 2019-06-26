@@ -46,15 +46,40 @@ router.post('/',
 // @route    GET api/posts
 // @desc     Get all posts
 // @access   Private
+router.get('/', auth, async (req, res) => {
+    try {
+        const post = await Post.find().sort({ date: -1 });
+        res.json(post);
+    } catch(err) {
+        console.log(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 
 // @route    GET api/posts/:id
 // @desc     Get post by ID
 // @access   Private
+router.get('/:id', auth, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if(!post) {
+            return res.status(400).json({ msg: 'Post not found' });
+        }
+        res.json(post);
+    } catch(err) {
+        console.log(err.message);
+        if(err.kind === 'ObjectId') {
+            return res.status(400).json({ msg: 'Post not found' });
+        }
+        res.status(500).send('Server Error');
+    }
+});
 
 // @route    DELETE api/posts/:id
 // @desc     Delete a post
 // @access   Private
+
 
 // @route    PUT api/posts/like/:id
 // @desc     Like a post
