@@ -1,9 +1,75 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator');
+const auth = require('../../middleware/auth');
 
-// @route GET api/posts
-// @desc Test route
-// @access Public 
-router.get('/', (req, res) => res.send('Posts route'));
+const Post = require('../../models/Post');
+const Profile = require('../../models/Profile');
+const User = require('../../models/User');
+
+// @route    POST api/posts
+// @desc     Create a post
+// @access   Private
+router.post('/', 
+    [
+        auth,
+        [
+            check('text', 'Text is required').not().isEmpty()
+        ]
+    ],
+    async (req, res) => {
+        const error = validationResult(req);
+        if(!error.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+        try {
+            const user = await User.findById(req.user.id).select('-password');
+
+            const newPost = new Post({
+                text: req.body.text,
+                name: user.name,
+                avatar: user.avatar,
+                user: req.user.id
+            })
+
+            const post = await newPost.save();
+
+            res.json(post);
+
+        } catch(err) {
+            console.log(err.message);
+            res.status(500).send('Server Error');
+        }
+});
+
+// @route    GET api/posts
+// @desc     Get all posts
+// @access   Private
+
+
+// @route    GET api/posts/:id
+// @desc     Get post by ID
+// @access   Private
+
+// @route    DELETE api/posts/:id
+// @desc     Delete a post
+// @access   Private
+
+// @route    PUT api/posts/like/:id
+// @desc     Like a post
+// @access   Private
+
+// @route    PUT api/posts/unlike/:id
+// @desc     Like a post
+// @access   Private
+
+// @route    POST api/posts/comment/:id
+// @desc     Comment on a post
+// @access   Private
+
+// @route    DELETE api/posts/comment/:id/:comment_id
+// @desc     Delete comment
+// @access   Private
 
 module.exports = router;
