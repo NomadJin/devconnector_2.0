@@ -1,7 +1,5 @@
 import axios from "axios";
-//import { setAlert } from './alert';
-
-import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE } from "./type";
+import { GET_PROFILE, PROFILE_ERROR } from "./type";
 import { setAlert } from "./alert";
 
 // get currnet users profile
@@ -22,35 +20,39 @@ export const getCurrentProfile = () => async dispatch => {
 };
 
 // create or update profile
-export const createProfile = ( formData, histroy, edit = false) => async dispatch => {
+export const createProfile = (
+  formData,
+  histroy,
+  edit = false
+) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
-  }
+  };
 
   try {
     const res = await axios.post("/api/profile", formData, config);
 
     dispatch({
-      type: UPDATE_PROFILE,
+      type: GET_PROFILE,
       payload: res.data
-    })
+    });
 
-    dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
+    dispatch(setAlert(edit ? "Profile Updated" : "Profile Created", "success"));
 
-    if(!edit) {
-      histroy.push('/dashboard');
+    if (!edit) {
+      histroy.push("/dashboard");
     }
-  } catch(err) {
+  } catch (err) {
     const errors = err.response.data.errors;
 
-    if(errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
     }
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
-    })
+    });
   }
-}
+};
