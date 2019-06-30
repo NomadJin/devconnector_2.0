@@ -19,7 +19,7 @@ const ProfileItem = ({
         <p>
           {status} {company && <span>at {company}</span>}
         </p>
-        <p>{location}</p>
+        <p>{location && <span>{location}</span>}</p>
         <Link to={`/profile/${_id}`} className="btn btn-primary">
           View Profile
         </Link>

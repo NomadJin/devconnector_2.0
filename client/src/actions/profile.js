@@ -41,30 +41,29 @@ export const getProfiles = () => async dispatch => {
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
-    })
-    
+    });
   }
-}
+};
 
 // get profile by ID
 export const getProfileById = userId => async dispatch => {
-  try{
+  try {
     const res = await axios.get(`/api/profile/user/${userId}`);
     dispatch({
-      tyep: GET_PROFILE,
+      type: GET_PROFILE,
       payload: res.data
     });
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
-    })
+    });
   }
-}
+};
 
 // get github repos
 export const getGithubRepos = username => async dispatch => {
-  try{
+  try {
     const res = await axios.get(`/api/profile/github/${username}`);
     dispatch({
       tyep: GET_REPOS,
@@ -74,9 +73,9 @@ export const getGithubRepos = username => async dispatch => {
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
-    })
+    });
   }
-}
+};
 
 // create or update profile
 export const createProfile = (

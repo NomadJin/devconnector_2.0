@@ -1,40 +1,42 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Moment from "react-moment";
+import moment from "moment";
 
-const ProfileExperience = props => {
+const ProfileExperience = ({
+  experience: { company, title, location, current, to, from, description }
+}) => {
   return (
-    <div class="profile-exp bg-white p-2">
-      <h2 class="text-primary">Experience</h2>
+    <div className="profile-exp bg-white p-2">
+      <h2 className="text-primary">Experience</h2>
       <div>
-        <h3 class="text-dark">Microsoft</h3>
-        <p>Oct 2011 - Current</p>
+        <h3 className="text-dark">{company}</h3>
         <p>
-          <strong>Position: </strong>Senior Developer
+          <Moment format="YYYY/MM/DD">{moment.utc(from)}</Moment> -{" "}
+          {to === null ? (
+            " Now"
+          ) : (
+            <Moment format="YYYY/MM/DD">{moment.utc(to)}</Moment>
+          )}
         </p>
         <p>
-          <strong>Description: </strong>Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Dignissimos placeat, dolorum ullam ipsam, sapiente
-          suscipit dicta eius velit amet aspernatur asperiores modi quidem
-          expedita fugit.
-        </p>
-      </div>
-      <div>
-        <h3 class="text-dark">Sun Microsystems</h3>
-        <p>Nov 2004 - Nov 2011</p>
-        <p>
-          <strong>Position: </strong>Systems Admin
+          <strong>Position: </strong>
+          {title}
         </p>
         <p>
-          <strong>Description: </strong>Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Dignissimos placeat, dolorum ullam ipsam, sapiente
-          suscipit dicta eius velit amet aspernatur asperiores modi quidem
-          expedita fugit.
+          <strong>Location: </strong> {location}
+        </p>
+        <p>
+          <strong>Description: </strong>
+          {description}
         </p>
       </div>
     </div>
   );
 };
 
-ProfileExperience.propTypes = {};
+ProfileExperience.propTypes = {
+  experience: PropTypes.object.isRequired
+};
 
 export default ProfileExperience;
