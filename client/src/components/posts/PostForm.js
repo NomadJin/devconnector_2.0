@@ -1,18 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { addPost } from "../../actions/post";
 
-const PostForm = props => {
+const PostForm = ({ addPost }) => {
+  const [text, setText] = useState("");
+
+  const onChange = e => {
+    setText(e.target.value);
+  };
+
+  const onSubmit = e => {
+    e.preventDefault();
+    addPost({ text });
+    setText("");
+  };
+
   return (
     <div className="post-form">
       <div className="bg-primary p">
         <h3>Say Something...</h3>
       </div>
-      <form className="form my-1">
+      <form className="form my-1" onSubmit={e => onSubmit(e)}>
         <textarea
           name="text"
           cols="30"
           rows="5"
           placeholder="Create a post"
+          vaue={text}
+          onChange={e => onChange(e)}
           required
         />
         <input type="submit" className="btn btn-dark my-1" value="Submit" />
@@ -21,6 +37,11 @@ const PostForm = props => {
   );
 };
 
-PostForm.propTypes = {};
+PostForm.propTypes = {
+  addPost: PropTypes.func.isRequired
+};
 
-export default PostForm;
+export default connect(
+  null,
+  { addPost }
+)(PostForm);
